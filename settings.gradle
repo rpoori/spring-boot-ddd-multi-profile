@@ -1,4 +1,4 @@
-rootProject.name = 'spring-boot-domain-driven-design'
+rootProject.name = 'spring-boot-ddd-multi-profile'
 include 'apis:sample-api'
 include 'domains:user'
 include 'implementations:external-user-service'
