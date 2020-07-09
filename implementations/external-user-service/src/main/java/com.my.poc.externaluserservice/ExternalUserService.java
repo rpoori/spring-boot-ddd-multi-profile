@@ -45,6 +45,7 @@ public class ExternalUserService implements UserStore {
                 .map(userInfo -> User.builder()
                         .id(userInfo.getId())
                         .name(userInfo.getName())
+                        .email(userInfo.getEmail())
                         .status(userInfo.getStatus())
                         .build())
                 .collect(Collectors.toList());

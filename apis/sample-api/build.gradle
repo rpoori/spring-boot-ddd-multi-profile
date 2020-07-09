@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.run.BootRun
+
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'java'
@@ -18,4 +20,27 @@ bootJar {
 
 bootRun {
     args = ["--spring.profiles.active=local"]
+}
+
+task pathingJar(type: Jar) {
+    dependsOn sourceSets.test.runtimeClasspath
+    appendix 'pathing'
+    
+    doFirst {
+        manifest {
+            attributes "Class-Path": sourceSets.test.runtimeClasspath.files.collect {
+                it.toURI().toString().replaceFirst('file:/', '/')
+            }.join(' ')
+        }
+    }
+}
+
+task demoBootRun(type: BootRun) {
+    dependsOn pathingJar
+    doFirst {
+        classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
+    }
+    main = "com.my.poc.springbootdddmultiprofile.SpringBootDDDMultiProfileApplication"
+    group = 'application'
+    args = ["--spring.profiles.active=demo"]
 }
